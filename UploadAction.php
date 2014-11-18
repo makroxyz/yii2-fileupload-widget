@@ -31,7 +31,7 @@ class UploadAction extends BaseAction
     /**
      * @var string parameter name
      */
-    public $paramName;
+    public $fileAttribute;
 
     /**
      * @var array|false accepted file extensions, false to allow any extension
@@ -100,8 +100,8 @@ class UploadAction extends BaseAction
             throw new \yii\web\HttpException(500);
         }*/
 
-        if ($this->paramName === null) {
-            throw new InvalidConfigException("'paramName' property must be specified.");
+        if ($this->fileAttribute === null) {
+            throw new InvalidConfigException("'fileAttribute' property must be specified.");
         }
 
         if ($this->uploadDest === null) {
@@ -151,14 +151,22 @@ class UploadAction extends BaseAction
 
     protected function handleUpload()
     {
-        $paramName = $this->paramName;
-        $file = UploadedFile::getInstanceByName($this->paramName);
-        if ($file !== null) {
-            $files = [$file];
-        } else {
-            $files = UploadedFile::getInstancesByName($this->paramName);
-            $paramName = $this->paramName . '[]';
-        }
+        $model->{$this->fileAttribute} = UploadedFile::getInstance($model, $this->fileAttribute);
+//        $model = $this->formModel;
+//        if ($model->{$this->fileAttribute} !== null) {
+//            $model->{$this->mimeTypeAttribute} = $model->{$this->fileAttribute}->getType();
+//            $model->{$this->sizeAttribute} = $model->{$this->fileAttribute}->getSize();
+//            $model->{$this->displayNameAttribute} = $model->{$this->fileAttribute}->getName();
+//            $model->{$this->fileNameAttribute} = $model->{$this->displayNameAttribute};
+//        
+//        $fileAttribute = $this->fileAttribute;
+//        $file = UploadedFile::getInstanceByName($this->fileAttribute);
+//        if ($file !== null) {
+//            $files = [$file];
+//        } else {
+//            $files = UploadedFile::getInstancesByName($this->fileAttribute);
+//            $fileAttribute = $this->fileAttribute . '[]';
+//        }
 
         $response = [];
 
